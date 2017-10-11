@@ -1,0 +1,13 @@
+---
+
+- hosts: dev
+  become: yes
+  roles:
+  - web
+  - tomcat
+
+- hosts: stage
+  become: yes
+  roles:
+  - web
+  - tomcat

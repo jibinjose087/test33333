@@ -1,0 +1,6 @@
+---
+
+apache_port: 9926
+apache_doc_root: /opt/apache_doc_root_stage
+server_name: stage.myidm.com
+apache_log_folder: /var/log/httpd

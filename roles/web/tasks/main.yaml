@@ -1,0 +1,7 @@
+---
+
+- name: include os specific variables
+  include_vars: 'roles/web/vars/{{ansible_os_family}}.yml'
+
+- name: include webserver task list
+  include: 'roles/web/tasks/setup-{{ ansible_os_family}}.yml'

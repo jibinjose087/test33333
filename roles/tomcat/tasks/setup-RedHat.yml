@@ -1,0 +1,47 @@
+---
+
+- name: download java from oracle website
+  get_url:
+   url: '{{ java_download_url }}'
+   dest: '{{ java_dir }}'
+   headers: '{{ args }}'
+   owner: jenkins
+   group: jenkins
+   backup: yes
+
+- name: create directory for java
+  file:
+    path: '{{ java_dir }}/{{ java_extract }}'
+    state: directory
+    owner: jenkins
+    group: jenkins
+
+- name: extract java archive
+  unarchive:
+    src: '{{ java_dir }}/{{ java_archive }}'
+    dest: '{{ java_dir }}/{{ java_extract }}'
+    extra_opts: ['--strip-components=1', '--show-stored-names']
+    creates: '{{ java_dir }}/{{ java_extract }}/bin/java'
+    remote_src: yes
+
+- name: create directory for java 7
+  file:
+    path: '{{ java_dir }}/{{ java_7_extract }}'
+    state: directory
+    owner: root
+    group: root
+
+- name: download java 7
+  get_url:
+    url: '{{ download_java7_url }}'
+    dest: '{{ java_dir }}'
+    owner: root
+    group: root
+
+- name: unarchive java 7
+  unarchive:
+    src: '{{ java_dir }}/{{ java_7_archive }}'
+    dest: '{{ java_dir }}/{{ java_7_extract }}'
+    extra_opts: ['--strip-components', '--show-stored-names']
+    creates: '{{ java_dir }}/{{ java_7_extract }}/bin/java'
+    remote_src: yes

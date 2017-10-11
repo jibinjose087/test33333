@@ -1,0 +1,6 @@
+---
+
+ntp_server_1: 0.rhel.pool.ntp.org
+ntp_server_2: 1.rhel.pool.ntp.org
+ntp_server_3: 2.rhel.pool.ntp.org
+ntp_server_4: 3.rhel.pool.ntp.org

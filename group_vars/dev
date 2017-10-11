@@ -1,0 +1,6 @@
+---
+
+apache_port: 9925
+apache_doc_root: /opt/apache_doc_root_dev
+server_name: dev.myidm.com
+apache_log_folder: /var/log/httpd

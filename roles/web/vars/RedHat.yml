@@ -1,0 +1,4 @@
+---
+
+apache_package: httpd
+ntp_root: /etc/

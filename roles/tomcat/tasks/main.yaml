@@ -1,0 +1,7 @@
+---
+
+- name: include os specific variables
+  include_vars: 'roles/tomcat/vars/{{ansible_os_family}}.yml'
+
+- name: include webserver task list
+  include: 'roles/tomcat/tasks/setup-{{ ansible_os_family }}.yml'

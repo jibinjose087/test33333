@@ -1,0 +1,22 @@
+---
+
+- name: install ntp
+  yum:
+    name: ntp
+    state: installed
+
+- name: enable ntp
+  service:
+    name: ntpd
+    state: started
+
+- name: configure ntp conf file
+  template:
+    src: ntp.conf.j2
+    dest: '{{ ntp_root }}/ntp.conf'
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  notify:
+    - restart ntp
