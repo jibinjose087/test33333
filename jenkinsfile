@@ -1,0 +1,59 @@
+pipeline {
+    agent { label 'master'}
+    environment {
+        EMAIL_RECIPIENTS = 'jibinjose087@gmail.com'
+    }
+ options {
+  disableConcurrentBuilds()
+  timeout(time: 120, unit: 'MINUTES')
+  timestamps()
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '30', numToKeepStr: '10')
+}
+
+    stages {
+	
+	        stage('Checkout Stage') {
+            steps {
+                script {
+				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/jibinjose087/warrepo.git']]])
+                }
+
+            }
+        }
+
+        stage('Build with unit testing') {
+            steps {
+                script {
+                    echo 'Pulling...' + env.BRANCH_NAME
+                    def mvnHome = tool 'Maven'
+                    if (isUnix()) {
+                        def targetVersion = getDevVersion()
+                        print 'target build version...'
+                        print targetVersion
+                        sh "'${mvnHome}/bin/mvn' -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} clean package"
+                        def pom = readMavenPom file: 'pom.xml'
+                        // get the current development version 
+                        print pom.version
+                    } else {
+                        print pom.version
+                    }
+                }
+
+            }
+        }
+
+    }
+	
+}	
+	def getDevVersion() {
+    def gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+    def versionNumber;
+    if (gitCommit == null) {
+        versionNumber = env.BUILD_NUMBER;
+    } else {
+        versionNumber = gitCommit.take(8);
+    }
+    print 'build  versions...'
+    print versionNumber
+    return versionNumber
+}
